@@ -1,4 +1,6 @@
-assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"), correct=c(TRUE, FALSE), fast=c(TRUE,FALSE), detection=TRUE, plotAt=TRUE, ...) {
+assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"), 
+                            correct=c(TRUE, FALSE), fast=c(TRUE,FALSE), 
+                            detection=TRUE, plotAt=TRUE, ...) {
   subjects <- sort(unique(inData$Subject))
   subjects <- factor(subjects)
   nsubjects <- length(subjects)
@@ -7,7 +9,7 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"), correct=c(TRUE
   conditions <- factor(conditions)
   nconditions <- length(conditions)
 
-  channels <- grep("Channel", names(inData), value=T)
+  channels <- grep("Channel", names(inData), value=TRUE)
   nchannels <- length(channels)
   if(nchannels < 2) {
     stop("Not enough channels for capacity analysis.")
