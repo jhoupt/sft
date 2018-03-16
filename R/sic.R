@@ -35,9 +35,12 @@ sicGroup <- function(inData, sictest="ks", mictest=c("art", "anova"), domtest="k
   }
   
   for ( cn in 1:nconditions ) {
-    if (is.factor(conditions)) {cond <- levels(conditions)[cn]} else {cond <- conditions[cn] }
-    for ( sn in 1:nsubjects ) {
-      if (is.factor(subjects)) {subj <- levels(subjects)[sn]} else {subj <- subjects[sn] }
+    cond <- levels(conditions)[cn]
+    condsubjects <- factor(with(inData, 
+                                sort(unique(Subject[Condition==cond]))))
+    ncondsubjects <- length(condsubjects)
+    for ( sn in 1:ncondsubjects) {
+      subj <- levels(condsubjects)[sn]
       if (plotSIC & ( sn %% 9 == 1) ) {
         dev.new()
         par(mfrow=c(3,3))

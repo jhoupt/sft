@@ -118,12 +118,12 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"),
       dev.new()
       if(sum(cond.out==cond) > 1) {
         matplot(times, t(atMat[cond.out==cond,]), type='l', lty=1,
-          main=paste(cond, paste(rule, "Capacity"),sep="\n"), xlab="Time",ylab="C(t)",...)
+          main=paste(cond, paste(rule, "Assessment"),sep="\n"), xlab="Time",ylab="A(t)",...)
         abline(1,0, lwd=2)
 
       } else {
         plot(times, atMat[cond.out==cond,], type='l', lty=1,
-          main=paste(cond, paste(rule, "Capacity"),sep="\n"), xlab="Time",ylab="C(t)",...)
+          main=paste(cond, paste(rule, "Assessment"),sep="\n"), xlab="Time",ylab="A(t)",...)
         abline(1,0, lwd=2)
       }
 
