@@ -133,7 +133,7 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"),
   }
 
 
-  return(list(At.fn=atMat, assessment=atlist, times=times))
+  return(list(Subject=subj.out, Condition=cond.out, At.fn=atMat, assessment=atlist, times=times))
 
 }
 
