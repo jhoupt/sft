@@ -4,12 +4,11 @@ citEntry(
   title   = "Systems Factorial Technology with R",
   author  = c(person("Joseph","Houpt",email="joseph.houpt@wright.edu"), person("Leslie", "Blaha"), person("John", "McIntire"), person("Paul", "Havig"), person("James", "Townsend")),
   journal = "Behavior Research Methods",
-  pages   = "XX-X",
-  number  = "X",
-  volume  = "XX",
-  year    = "2013",
+  pages   = "307-330",
+  volume  = "46",
+  year    = "2014",
   textVersion = paste(
-    "Houpt, J.W., Blaha, L.M., McIntire, J.P., Havig, P.R. and Townsend, J.T. (2013)", 
+    "Houpt, J.W., Blaha, L.M., McIntire, J.P., Havig, P.R. and Townsend, J.T. (2014)", 
     "Systems Factorial Technology with R.",
-    "Behavior Research Methods, XX, XX-XX.")
+    "Behavior Research Methods, 46, 307-330.")
   )

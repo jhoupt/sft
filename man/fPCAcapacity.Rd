@@ -4,8 +4,8 @@
 \description{Calculates the principle functions and scores for the workload capacity measure of performance by each individual in each condition.}
 \usage{
 fPCAcapacity(sftData, dimensions, acc.cutoff=.75, OR=NULL, 
-  stopping.rule=c("OR","AND","STST"), ratio = TRUE, 
-  register=c("median","mean","none"), plotPCs = FALSE, ...)
+  stopping.rule=c("OR","AND","STST"), ratio=TRUE, 
+  register=c("median","mean","none"), plotPCs=FALSE, ...)
 }
 \arguments{
   \item{sftData}{Data collected from a Double Factorial Paradigm experiment in standard form.}

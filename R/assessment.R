@@ -1,4 +1,6 @@
-assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"), correct=c(TRUE, FALSE), fast=c(TRUE,FALSE), detection=TRUE, plotAt=TRUE, ...) {
+assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"), 
+                            correct=c(TRUE, FALSE), fast=c(TRUE,FALSE), 
+                            detection=TRUE, plotAt=TRUE, ...) {
   subjects <- sort(unique(inData$Subject))
   subjects <- factor(subjects)
   nsubjects <- length(subjects)
@@ -7,7 +9,7 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"), correct=c(TRUE
   conditions <- factor(conditions)
   nconditions <- length(conditions)
 
-  channels <- grep("Channel", names(inData), value=T)
+  channels <- grep("Channel", names(inData), value=TRUE)
   nchannels <- length(channels)
   if(nchannels < 2) {
     stop("Not enough channels for capacity analysis.")
@@ -116,12 +118,12 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"), correct=c(TRUE
       dev.new()
       if(sum(cond.out==cond) > 1) {
         matplot(times, t(atMat[cond.out==cond,]), type='l', lty=1,
-          main=paste(cond, paste(rule, "Capacity"),sep="\n"), xlab="Time",ylab="C(t)",...)
+          main=paste(cond, paste(rule, "Assessment"),sep="\n"), xlab="Time",ylab="A(t)",...)
         abline(1,0, lwd=2)
 
       } else {
         plot(times, atMat[cond.out==cond,], type='l', lty=1,
-          main=paste(cond, paste(rule, "Capacity"),sep="\n"), xlab="Time",ylab="C(t)",...)
+          main=paste(cond, paste(rule, "Assessment"),sep="\n"), xlab="Time",ylab="A(t)",...)
         abline(1,0, lwd=2)
       }
 
@@ -131,7 +133,7 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"), correct=c(TRUE
   }
 
 
-  return(list(At.fn=atMat, assessment=atlist, times=times))
+  return(list(Subject=subj.out, Condition=cond.out, At.fn=atMat, assessment=atlist, times=times))
 
 }
 
