@@ -262,7 +262,7 @@ fPCAassessment<- function(sftData, dimensions,
                        floor(100*pca.str.good.varmx$varprop[ifac]), "%")
       fn.i <- at.good.mn + fac.mult.v[ifac]* harm.mat.v[,ifac]
       plot(t.good, fn.i, type='l', lty=2, main="", xlab="Time (Adjusted)", 
-           ylab="", ylim=ylim, xlim=c(t.min, t.max))
+           ylab="", ylim=ylim1, xlim=c(t.min, t.max))
       lines(t.good, at.good.mn)
       abline(0,0, col=grey(.4))
       mtext(mainstr, side=2, line=1)
@@ -273,7 +273,8 @@ fPCAassessment<- function(sftData, dimensions,
       }
 
       plot(t.good, fn.i - at.good.mn, type='l', main="", 
-           xlab="Time (Adjusted)", ylab="", ylim=ylim, xlim=c(t.min, t.max))
+           xlab="Time (Adjusted)", ylab="", ylim=ylim2, 
+           xlim=c(t.min, t.max))
       abline(0,0, col=grey(.4))
 
       if(ifac ==1) {
