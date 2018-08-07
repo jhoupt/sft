@@ -17,8 +17,8 @@ The Nelson-Aalen estimator of the cumulative reverse hazard function is a step f
       K(t) = -sum(s in {Event Times > t}) 1/G(s)}
 }
 \value{
-  \item{H }{A function of class "stepfun" that returns the Nelson-Aalen estimator of the cumulative hazard function.}
-  \item{Var }{A function of class "stepfun" that returns estimated variance of the Nelson-Aalen estimator of the cumulative hazard function.}
+  \item{K }{A function of class "stepfun" that returns the Nelson-Aalen estimator of the cumulative reverse hazard function.}
+  \item{Var }{A function of class "stepfun" that returns estimated variance of the Nelson-Aalen estimator of the cumulative reverse hazard function.}
 }
 \references{
 Aalen, O. O., Borgan, O., & Gjessing, H. K. (2008). \emph{Survival and event history analysis: A process point of view}. New York: Springer.
