@@ -12,18 +12,10 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"),
   channels <- grep("Channel", names(inData), value=TRUE)
   nchannels <- length(channels)
   if(nchannels < 2) {
-    stop("Not enough channels for capacity analysis.")
+    stop("Not enough channels for assessment analysis.")
   }
 
   rule <- match.arg(stopping.rule, c("OR","AND"))
-  if(rule == "OR") {
-    capacity <- capacity.or
-  } else if (rule == "AND") {
-    capacity <- capacity.and 
-  } else  {
-    stop("Please choose a valid stopping rule for assessmentGroup.")
-  }
-  
 
   times <- seq(quantile(inData$RT,.001), quantile(inData$RT,.999), 
               length.out=1000)

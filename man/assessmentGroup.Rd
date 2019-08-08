@@ -46,10 +46,10 @@ Joe Houpt <joseph.houpt@wright.edu>
 \dontrun{
 data(dots)
 assessmentGroup(subset(dots, Condition=="OR"), 
-  stopping.rule="OR", correct=TRUE, fast=TRUE, 
+  stopping.rule="OR", correct=TRUE, fast=FALSE, 
   detection=TRUE)
-capacityGroup(subset(dots, Condition=="AND"), 
-  stopping.rule="AND")
+assessmentGroup(subset(dots, Condition=="AND"), 
+  stopping.rule="AND", correct=TRUE, fast=TRUE, )
 }
 }
 \keyword{ sft }
