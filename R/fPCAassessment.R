@@ -24,15 +24,6 @@ fPCAassessment<- function(sftData, dimensions,
   register <- match.arg(register, c("mean","median","none"))
 
   rule <- match.arg(stopping.rule, c("OR","AND","STST"))
-  if(rule == "OR") {
-    capacity <- capacity.or
-  } else if (rule == "AND") {
-    capacity <- capacity.and 
-  } else if (rule == "STST"){
-    capacity <- capacity.stst
-  } else  {
-    stop("Please choose a valid stopping rule for fPCAassessment.")
-  }
 
   if (rule!="STST") {
     # Currently only does present versus absent
@@ -72,7 +63,7 @@ fPCAassessment<- function(sftData, dimensions,
   colvec <- numeric()
   condLegend <- levels(conditions)
 
-  # Calculate capacity for each participant in each condition
+  # Calculate assessment for each participant in each condition
   for ( cn in 1:n.conditions ) {
     cond <- levels(conditions)[cn]
     cond.subjects <- with(sftData, factor(Subject[Condition==cond]))
@@ -129,7 +120,7 @@ fPCAassessment<- function(sftData, dimensions,
         }
       }
 
-# Track the amount of offset for each capacity function (for registration)
+# Track the amount of offset for each assessment function (for registration)
       if (register == "median") {
         registervals <- c(registervals, 
                           mean(median(RTlist[[1]]), 
