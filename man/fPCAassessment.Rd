@@ -55,8 +55,8 @@ Joe Houpt <joseph.houpt@wright.edu>
 \examples{
 \dontrun{
 data(dots)
-fPCAassessment(dots, dimensions=2, stopping.rule="OR", correct=TRUE, fast=FALSE, 
-               detection=TRUE, plotPCs=TRUE)
+fPCAassessment(dots, dimensions=2, stopping.rule="OR", register="median",
+               correct=TRUE, fast=FALSE, detection=TRUE, plotPCs=TRUE)
 }
 }
 \keyword{ sft }
