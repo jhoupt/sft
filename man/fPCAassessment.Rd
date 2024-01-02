@@ -46,7 +46,7 @@ Townsend, J.T. and Altieri, N. (2012).  An accuracy-response time capacity asses
 
 }
 \author{
-Joe Houpt <joseph.houpt@wright.edu>
+Joe Houpt <joseph.houpt@utsa.edu>
 }
 \seealso{
 \code{\link{assessment}}

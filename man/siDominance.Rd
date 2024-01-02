@@ -32,7 +32,7 @@ Houpt, J.W. & Townsend, J.T. (2010). The statistical properties of the survivor 
 Dzhafarov, E.N., Schweickert, R., & Sung, K. (2004). Mental architectures with selectively influenced but stochastically interdependent components. \emph{Journal of Mathematical Psychology}, 48, 51-64.
 }
 \author{
-Joe Houpt <joseph.houpt@wright.edu>
+Joe Houpt <joseph.houpt@utsa.edu>
 }
 \seealso{
 \code{\link{ks.test}}

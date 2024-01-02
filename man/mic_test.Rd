@@ -42,7 +42,7 @@ Sawilowsky, S.S. (1990).  Nonparametric tests of interaction in experimental des
 Houpt, J.W. & Townsend, J.T. (2010). The statistical properties of the survivor interaction contrast. \emph{Journal of Mathematical Psychology, 54}, 446-453.
 }
 \author{
-Joe Houpt <joseph.houpt@wright.edu>
+Joe Houpt <joseph.houpt@utsa.edu>
 }
 \examples{
 T1.h <- rweibull(300, shape=2 , scale=400 )

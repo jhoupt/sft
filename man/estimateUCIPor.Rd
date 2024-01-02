@@ -41,7 +41,7 @@ Townsend, J.T. & Nozawa, G. (1995). Spatio-temporal properties of elementary per
 Houpt, J.W. & Townsend, J.T. (2012). Statistical Measures for Workload Capacity Analysis.  \emph{Journal of Mathematical Psychology, 56}, 341-355.
 }
 \author{
-Joe Houpt <joseph.houpt@wright.edu>
+Joe Houpt <joseph.houpt@utsa.edu>
 }
 
 \seealso{

@@ -28,6 +28,9 @@ capacityGroup <- function(inData, acc.cutoff=.9, ratio=TRUE, OR=NULL, stopping.r
       capacity <- capacity.and 
     } else if (rule == "STST"){
       capacity <- capacity.stst
+      if (sum((apply(inData[,channels]>0, 1, sum)==1) & (apply(inData[,channels]<0, 1, sum)>0)) == 0) {
+        stop("Necessary data for STST analysis not found!\nSTST analysis requires data from target alone trials and target amond distractor trials.")
+      }
     } else  {
       stop("Please choose a valid stopping rule for fPCAcapacity.")
     }
@@ -190,15 +193,19 @@ capacityGroup <- function(inData, acc.cutoff=.9, ratio=TRUE, OR=NULL, stopping.r
     cond.out.g <- c(cond.out.g, cond)
     mZscore <- mean(Zscore, na.rm=TRUE)
     nZscore <- sum(!is.na(Zscore))
-    pZscore <- t.test(Zscore)$p.value
-    if( (pZscore < .025) | (pZscore > .975) )  {
-      if(mZscore < 0) {
-        capmodel <- c(capmodel, "Limited")
-      } else {
-        capmodel <- c(capmodel, "Super")
-      }
-    } else {
-      capmodel <- c(capmodel, "Nonsignificant")
+    if(nZscore > 2) { 
+      pZscore <- t.test(Zscore)$p.value
+    	if( (pZscore < .025) | (pZscore > .975) )  {
+    	  if(mZscore < 0) {
+    	    capmodel <- c(capmodel, "Limited")
+    	  } else {
+    	    capmodel <- c(capmodel, "Super")
+    	  }
+    	} else {
+    	  capmodel <- c(capmodel, "Nonsignificant")
+    	}
+    } else { 
+      capmodel <- c(capmodel, "Unknown")
     }
 
   }

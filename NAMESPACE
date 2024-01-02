@@ -1,6 +1,6 @@
 # Export all names
 #exportPattern(".")
-export(estimate.bounds, assessment, assessmentGroup, fPCAassessment, fPCAcapacity, mic.test, sic.test, capacity.and, capacity.or, capacity.stst, capacityGroup, estimateNAH, estimateNAK, estimateUCIPor, estimateUCIPand, sic, sicGroup,ucip.test, siDominance)
+export(estimate.bounds, assessment, assessmentGroup, fPCAassessment, fPCAcapacity, mic.test, sic.test, capacity.and, capacity.id, capacity.or, capacity.stst, capacityGroup, estimateNAH, estimateNAK, estimateUCIPor, estimateUCIPand, sic, sicGroup, ucip.test, ucip.id.test, siDominance)
 
 # Import all packages listed as Imports or Depends
 import(methods,fda,SuppDists)

@@ -33,7 +33,7 @@ Townsend, J.T. and Altieri, N. (2012).  An accuracy-response time capacity asses
 Donkin, C, Little, D.R. and Houpt (2013). Assessing the effects of caution on the capacity of information processing.  \emph{Manuscript submitted for publication.}
 }
 \author{
-Joe Houpt <joseph.houpt@wright.edu>
+Joe Houpt <joseph.houpt@utsa.edu>
 }
 \seealso{
 \code{\link{capacity.or}}

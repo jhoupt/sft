@@ -26,7 +26,7 @@ Aalen, O. O., Borgan, O., & Gjessing, H. K. (2008). \emph{Survival and event his
 Houpt, J.W. & Townsend, J.T. (2012). Statistical Measures for Workload Capacity Analysis.  \emph{Journal of Mathematical Psychology, 56}, 341-355.
 }
 \author{
-Joe Houpt <joseph.houpt@wright.edu>
+Joe Houpt <joseph.houpt@utsa.edu>
 }
 
 \seealso{

@@ -124,7 +124,7 @@ fPCAcapacity <- function(sftData, dimensions, acc.cutoff=.75, OR=NULL, stopping.
 
       # Tracks the amount of offset for each capacity function  (for registering)
       if (register == "median") {
-        registervals <- c(registervals, mean(median(RTlist[[1]], median(c(RTlist[2:nconditions],recursive=TRUE)))) )
+        registervals <- c(registervals, mean(c(median(RTlist[[1]], median(c(RTlist[2:nconditions],recursive=TRUE))))))
         shiftn <- midpoint - max( which(tvec < tail(registervals,1)))
       } else if (register == "mean") {
         registervals <- c(registervals, mean(c(RTlist,recursive=TRUE)) )

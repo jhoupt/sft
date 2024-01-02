@@ -41,7 +41,7 @@ Houpt, J.W. & Townsend, J.T. (2012). Statistical Measures for Workload Capacity 
 Houpt, J.W., Blaha, L.M., McIntire, J.P., Havig, P.R. and Townsend, J.T. (2013). Systems Factorial Technology with R. \emph{Behavior Research Methods}.
 }
 \author{
-Joe Houpt <joseph.houpt@wright.edu>
+Joe Houpt <joseph.houpt@utsa.edu>
 }
 \seealso{
 \code{\link{ucip.test}}

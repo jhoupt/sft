@@ -92,7 +92,7 @@ Townsend, J.T. & Wenger, M.J. (2004). A theory of interactive parallel processin
 \author{
 Leslie Blaha <leslie.blaha@us.af.mil>
 
-Joe Houpt <joseph.houpt@wright.edu>
+Joe Houpt <joseph.houpt@utsa.edu>
 }
 \seealso{
 \code{\link{ucip.test}}

@@ -100,3 +100,68 @@ ucip.test <- function(RT, CR=NULL, OR=NULL, stopping.rule=c("OR","AND","STST")) 
   class(rval) <- "htest"
   return(rval)
 }
+
+ucip.id.test <- function(dual.target.rt, no.target.rt, single.target.rts, dual.target.cr=NULL, no.target.cr=NULL, single.target.crs=NULL) {
+  METHOD <- "Houpt-Townsend UCIP test"
+
+  n_single <- length(single.target.rts)
+
+  if ( is.null(dual.target.cr) ) { 
+    dual.target.cr <- rep(1, length(dual.target.rt))
+  } 
+  if ( is.null(no.target.cr) ) { 
+    no.target.cr <- rep(1, length(no.target.rt))
+  } 
+  if ( is.null(single.target.crs) | (length(single.target.crs) != n_single) ) {
+    single.target.crs <- vector("list", n_single)
+    for( i in 1:n_single ) {
+      single.target.crs[[i]] <- rep(1, length(single.target.rts[[i]]))
+    }
+  } 
+
+  allRT <- c(dual.target.rt, no.target.rt, c(single.target.rts, recursive=TRUE))
+  allCR <- c(dual.target.cr, no.target.cr, c(single.target.crs, recursive=TRUE))
+  #allRT <- c(RT, recursive=TRUE)
+  Nt <- length(allRT)
+
+  index <- c(rep(1, length(dual.target.rt)), rep(2, length(no.target.rt)))
+  for ( i in 1:n_single) {
+    index <- c(index, rep(i+2, length(single.target.rts[[i]])))
+  }
+
+  RTmat <- cbind( allRT, allCR, index)
+
+  RT.sort <- sort(RTmat[,1], index.return=TRUE)
+  cr.s <- RTmat[RT.sort$ix,2]
+  cond.s <- RTmat[RT.sort$ix,3]
+  tvec <- RT.sort$x
+  
+  ALTERNATIVE <- "response times are different than those predicted by the adjusted UCIP-AND model"
+  Garr <- rep(0, Nt)
+  Gmat <- matrix(0, 2+n_single, Nt)
+  for (j in 1:(2+n_single)) { 
+    for (i in 1:Nt ) {Gmat[j,i] <- sum(RTmat[RTmat[,3]==j,1] <= tvec[i]) }
+  }
+
+  Wv <- (Gmat[1,] + Gmat[2,])*(apply(Gmat[3:(2+n_single),], 2, sum)) / apply(Gmat, 2, sum)
+
+  numer <- -1 * (sum(Wv[cond.s==1&cr.s==1]/Gmat[1,cond.s==1&cr.s==1]) + 
+		 sum(Wv[cond.s==2&cr.s==1]/Gmat[2,cond.s==2&cr.s==1]))
+  for (i in 1:n_single) {
+    numer <- numer + sum(Wv[cond.s==(i+2)&cr.s==1]/Gmat[(i+2),cond.s==(i+2)&cr.s==1])
+  }
+  denom <- 0
+  for (i in 1:(2+n_single)) {
+    denom <- denom + sum((Wv[cond.s==i&cr.s==1]/Gmat[i,cond.s==i&cr.s==1])^2)
+  }
+  denom <- sqrt(denom)
+  
+  STATISTIC <- numer/denom
+  names(STATISTIC) = "z"
+
+  pval <- 2*min(pnorm(numer/denom),1-pnorm(numer/denom))
+  rval <- list(statistic=STATISTIC, p.value=pval, alternative=ALTERNATIVE,
+            method=METHOD)
+  class(rval) <- "htest"
+  return(rval)
+}

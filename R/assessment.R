@@ -129,271 +129,359 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"),
 
 }
 
-assessment <- function(RT, CR, OR=NULL, stopping.rule=c("OR","AND"), correct=c(TRUE, FALSE), fast=c(TRUE, FALSE), detection=TRUE) {
-  if (is.null(OR)) {
-    rule <- match.arg(stopping.rule, c("OR","AND"))
-  } else if (OR ==TRUE) {
-    rule <- "OR"
-  } else {
-    rule <- "AND"
-  }
 
+assessment <- function (RT, CR, stopping.rule = c("OR","AND","STST"), 
+    			correct = c(TRUE, FALSE), fast = c(TRUE, FALSE), 
+			detection = TRUE) {
+  rule <- match.arg(stopping.rule, c("OR", "AND", "STST"))
   slow <- !fast
   incorrect <- !correct
-
   times <- sort(unique(unlist(RT)))
   p.correct <- unlist(lapply(CR, mean))
-  
-  if (rule=="OR") {
+
+  if (rule == "OR") {
     if (detection) {
       if (correct & fast) {
-        ecdf.redundant <- ecdf(RT[[1]][ CR[[1]]==1 ])
-        ecdf.channel1  <- ecdf(RT[[2]][ CR[[2]]==1 ])
-        ecdf.channel2  <- ecdf(RT[[3]][ CR[[3]]==1 ])
-
-        channel1C  <- ecdf.channel1(times) * p.correct[2] * (1-p.correct[3])
-        channel2C  <- ecdf.channel2(times) * p.correct[3] * (1-p.correct[2])
-        channel12C <- ecdf.channel1(times) * p.correct[2] * (1-ecdf.channel2(times)) * p.correct[3]
-        channel21C <- (1-ecdf.channel1(times)) * p.correct[2] * ecdf.channel2(times) * p.correct[3]
-        channelCC <- ecdf.channel1(times) * p.correct[2] * ecdf.channel2(times) * p.correct[3]
-
-        numer <- log(channel1C + channel2C + channel12C + channel21C + channelCC)
+        ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 1])
+        ecdf.channel1 <- ecdf(RT[[2]][CR[[2]] == 1])
+        ecdf.channel2 <- ecdf(RT[[3]][CR[[3]] == 1])
+        channel1C <- ecdf.channel1(times) * p.correct[2] * 
+          (1 - p.correct[3])
+        channel2C <- ecdf.channel2(times) * p.correct[3] * 
+          (1 - p.correct[2])
+        channel12C <- ecdf.channel1(times) * p.correct[2] * 
+          (1 - ecdf.channel2(times)) * p.correct[3]
+        channel21C <- (1 - ecdf.channel1(times)) * p.correct[2] * 
+          ecdf.channel2(times) * p.correct[3]
+        channelCC <- ecdf.channel1(times) * p.correct[2] * 
+          ecdf.channel2(times) * p.correct[3]
+        numer <- log(channel1C + channel2C + channel12C + 
+                       channel21C + channelCC)
         denom <- log(ecdf.redundant(times) * p.correct[1])
-
         At <- numer/denom
         At[!is.finite(At)] <- NA
-        A <- stepfun(times, c(NA,At))
+        A <- stepfun(times, c(NA, At))
         attributes(A)$call <- "Detection OR: Correct and Fast"
       }
       if (correct & slow) {
-        ecdf.redundant <- ecdf(RT[[1]][ CR[[1]]==1 ])
-        ecdf.channel1  <- ecdf(RT[[2]][ CR[[2]]==1 ])
-        ecdf.channel2  <- ecdf(RT[[3]][ CR[[3]]==1 ])
-        
-        channel1C  <- (1-ecdf.channel1(times)) * p.correct[2] * (1-p.correct[3])
-        channel2C  <- (1-ecdf.channel2(times)) * p.correct[3] * (1-p.correct[2])
-        channelCC <-  (1-ecdf.channel1(times)) * p.correct[2] * (1-ecdf.channel2(times)) * p.correct[3]
-        
+        ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 1])
+        ecdf.channel1 <- ecdf(RT[[2]][CR[[2]] == 1])
+        ecdf.channel2 <- ecdf(RT[[3]][CR[[3]] == 1])
+        channel1C <- (1 - ecdf.channel1(times)) * p.correct[2] * 
+          (1 - p.correct[3])
+        channel2C <- (1 - ecdf.channel2(times)) * p.correct[3] * 
+          (1 - p.correct[2])
+        channelCC <- (1 - ecdf.channel1(times)) * p.correct[2] * 
+          (1 - ecdf.channel2(times)) * p.correct[3]
         numer <- log(channel1C + channel2C + channelCC)
-        denom <- log( (1-ecdf.redundant(times)) * p.correct[1] )
-
+        denom <- log((1 - ecdf.redundant(times)) * p.correct[1])
         At <- numer/denom
         At[!is.finite(At)] <- NA
-        A <- stepfun(times, c(NA,At))
+        A <- stepfun(times, c(NA, At))
         attributes(A)$call <- "Detection OR: Correct and Slow"
       }
-      if (incorrect & fast ) {
-        ecdf.redundant <- ecdf(RT[[1]][ CR[[1]]==0 ])
-        ecdf.channel1  <- ecdf(RT[[2]][ CR[[2]]==0 ])
-        ecdf.channel2  <- ecdf(RT[[3]][ CR[[3]]==0 ])
-
-        numer <- log( ecdf.channel1(times) * (1-p.correct[2])) + log( ecdf.channel2(times) * (1-p.correct[3]))
-        denom <- log( ecdf.redundant(times) * (1-p.correct[1]) )
-
+      if (incorrect & fast) {
+        ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 0])
+        ecdf.channel1 <- ecdf(RT[[2]][CR[[2]] == 0])
+        ecdf.channel2 <- ecdf(RT[[3]][CR[[3]] == 0])
+        numer <- log(ecdf.channel1(times) * (1 - p.correct[2])) + 
+          log(ecdf.channel2(times) * (1 - p.correct[3]))
+        denom <- log(ecdf.redundant(times) * (1 - p.correct[1]))
         At <- numer/denom
         At[!is.finite(At)] <- NA
-        A <- stepfun(times, c(NA,At))
+        A <- stepfun(times, c(NA, At))
         attributes(A)$call <- "Detection OR: Incorrect and Fast"
       }
       if (incorrect & slow) {
-        ecdf.redundant <- ecdf(RT[[1]][ CR[[1]]==0 ])
-        ecdf.channel1  <- ecdf(RT[[2]][ CR[[2]]==0 ])
-        ecdf.channel2  <- ecdf(RT[[3]][ CR[[3]]==0 ])
-
-        channel1I  <- (1-ecdf.channel1(times)) * (1-p.correct[2]) * (1-p.correct[3])
-        channel2I  <- (1-ecdf.channel2(times)) * (1-p.correct[2]) * (1-p.correct[3])
-        channelII <-  (1-ecdf.channel1(times)) * (1-ecdf.channel2(times)) * (1-p.correct[2]) * (1-p.correct[3])
-
-        numer <- log( channel1I + channel2I - channelII )
-        denom <- log( (1-ecdf.redundant(times)) * (1-p.correct[1]) )
-
+        ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 0])
+        ecdf.channel1 <- ecdf(RT[[2]][CR[[2]] == 0])
+        ecdf.channel2 <- ecdf(RT[[3]][CR[[3]] == 0])
+        channel1I <- (1 - ecdf.channel1(times)) * (1 - 
+                                                     p.correct[2]) * (1 - p.correct[3])
+        channel2I <- (1 - ecdf.channel2(times)) * (1 - 
+                                                     p.correct[2]) * (1 - p.correct[3])
+        channelII <- (1 - ecdf.channel1(times)) * (1 - 
+                                                     ecdf.channel2(times)) * (1 - p.correct[2]) * 
+          (1 - p.correct[3])
+        numer <- log(channel1I + channel2I - channelII)
+        denom <- log((1 - ecdf.redundant(times)) * (1 - 
+                                                      p.correct[1]))
         At <- numer/denom
         At[!is.finite(At)] <- NA
-        A <- stepfun(times, c(NA,At))
+        A <- stepfun(times, c(NA, At))
         attributes(A)$call <- "Detection OR: Incorrect and Slow"
       }
-    } else {
+    }
+    else {
       if (correct & fast) {
-        ecdf.redundant <- ecdf(RT[[1]][CR[[1]]==1])
-      
-        G <- vector("list", length(RT)-1)
+        ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 1])
+        G <- vector("list", length(RT) - 1)
         for (i in 2:length(RT)) {
           g <- rep(0, length(times))
-          for ( tval in RT[[i]][CR[[i]]==1] ) {
-            idx <- which(times==tval)
+          for (tval in RT[[i]][CR[[i]] == 1]) {
+            idx <- which(times == tval)
             g[idx] <- sum(RT[[i]] > tval)
           }
-          g <- g/(sum(CR[[i]])*length(RT[[-1*i+5]]))
-          G[[i-1]] <- cumsum(g)
+          g <- g/(sum(CR[[i]]) * length(RT[[-1 * i + 
+                                              5]]))
+          G[[i - 1]] <- cumsum(g)
         }
-      
-        numer <- rep(0,length(times))
-        for ( i in 2:length(RT) ) {
-          numer <- numer + p.correct[i]*G[[i-1]]
+        numer <- rep(0, length(times))
+        for (i in 2:length(RT)) {
+          numer <- numer + p.correct[i] * G[[i - 1]]
         }
         numer <- log(numer)
-        denom <- log(ecdf.redundant(times)*p.correct[1])
-      
+        denom <- log(ecdf.redundant(times) * p.correct[1])
         At <- numer/denom
         At[!is.finite(At)] <- NA
-        A <- stepfun(times, c(NA,At))
+        A <- stepfun(times, c(NA, At))
         attributes(A)$call <- "Discrimination OR: Correct and Fast"
       }
-  
       if (correct & slow) {
-      
-        ecdf.redundant <- ecdf(RT[[1]][CR[[1]]==1])
-      
-        G <- vector("list", length(RT)-1)
+        ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 1])
+        G <- vector("list", length(RT) - 1)
         for (i in 2:length(RT)) {
           g <- rep(0, length(times))
-          for ( tval in RT[[i]][CR[[i]]==1] ) {
-            idx <- which(times==tval)
+          for (tval in RT[[i]][CR[[i]] == 1]) {
+            idx <- which(times == tval)
             g[idx] <- sum(RT[[i]] > tval)
           }
-          g <- g/(sum(CR[[i]])*length(RT[[-1*i+5]]))
-          G[[i-1]] <- rev(cumsum(rev(g)))
+          g <- g/(sum(CR[[i]]) * length(RT[[-1 * i + 
+                                              5]]))
+          G[[i - 1]] <- rev(cumsum(rev(g)))
         }
-      
-        numer <- rep(0,length(times))
-        for ( i in 2:length(RT) ) {
-          numer <- numer + p.correct[i]*G[[i-1]]
+        numer <- rep(0, length(times))
+        for (i in 2:length(RT)) {
+          numer <- numer + p.correct[i] * G[[i - 1]]
         }
         numer <- log(numer)
-        denom <- log( (1-ecdf.redundant(times))*p.correct[1] )
-      
+        denom <- log((1 - ecdf.redundant(times)) * p.correct[1])
         At <- numer/denom
         At[!is.finite(At)] <- NA
-        A <- stepfun(times, c(NA,At))
+        A <- stepfun(times, c(NA, At))
         attributes(A)$call <- "Discrimination OR: Correct and Slow"
       }
-      
-      if (incorrect & fast ) {
-        p.incorrect <- 1-unlist(lapply(CR, mean))
-      
-        ecdf.redundant <- ecdf(RT[[1]][CR[[1]]==0])
-      
-        G <- vector("list", length(RT)-1)
+      if (incorrect & fast) {
+        p.incorrect <- 1 - unlist(lapply(CR, mean))
+        ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 0])
+        G <- vector("list", length(RT) - 1)
         for (i in 2:length(RT)) {
           g <- rep(0, length(times))
-          for ( tval in RT[[i]][CR[[i]]==0] ) {
-            idx <- which(times==tval)
+          for (tval in RT[[i]][CR[[i]] == 0]) {
+            idx <- which(times == tval)
             g[idx] <- sum(RT[[i]] > tval)
           }
-          g <- g/(sum(1-CR[[i]])*length(RT[[-1*i+5]]))
-          G[[i-1]] <- cumsum(g)
+          g <- g/(sum(1 - CR[[i]]) * length(RT[[-1 * 
+                                                  i + 5]]))
+          G[[i - 1]] <- cumsum(g)
         }
-      
-        numer <- rep(0,length(times))
-        for ( i in 2:length(RT) ) {
-          numer <- numer + p.incorrect[i]*G[[i-1]]
+        numer <- rep(0, length(times))
+        for (i in 2:length(RT)) {
+          numer <- numer + p.incorrect[i] * G[[i - 1]]
         }
         numer <- log(numer)
-        denom <- log( ecdf.redundant(times)*p.incorrect[1] )
-      
+        denom <- log(ecdf.redundant(times) * p.incorrect[1])
         At <- numer/denom
         At[!is.finite(At)] <- NA
-        A <- stepfun(times, c(NA,At))
+        A <- stepfun(times, c(NA, At))
         attributes(A)$call <- "Discrimination OR: Incorrect and Fast"
       }
-      
       if (incorrect & slow) {
-        p.incorrect <- 1-unlist(lapply(CR, mean))
-      
-        ecdf.redundant <- ecdf(RT[[1]][CR[[1]]==0])
-      
-        G <- vector("list", length(RT)-1)
+        p.incorrect <- 1 - unlist(lapply(CR, mean))
+        ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 0])
+        G <- vector("list", length(RT) - 1)
         for (i in 2:length(RT)) {
           g <- rep(0, length(times))
-          for ( tval in RT[[i]][CR[[i]]==0] ) {
-            idx <- which(times==tval)
+          for (tval in RT[[i]][CR[[i]] == 0]) {
+            idx <- which(times == tval)
             g[idx] <- sum(RT[[i]] > tval)
           }
-          g <- g/(sum(1-CR[[i]])*length(RT[[-1*i+5]]))
-          G[[i-1]] <- rev(cumsum(rev(g)))
+          g <- g/(sum(1 - CR[[i]]) * length(RT[[-1 * 
+                                                  i + 5]]))
+          G[[i - 1]] <- rev(cumsum(rev(g)))
         }
-      
-        numer <- rep(0,length(times))
-        for ( i in 2:length(RT) ) {
-          numer <- numer + p.incorrect[i]*G[[i-1]]
+        numer <- rep(0, length(times))
+        for (i in 2:length(RT)) {
+          numer <- numer + p.incorrect[i] * G[[i - 1]]
         }
         numer <- log(numer)
-        denom <- log( (1-ecdf.redundant(times))*p.incorrect[1] )
-      
+        denom <- log((1 - ecdf.redundant(times)) * p.incorrect[1])
         At <- numer/denom
         At[!is.finite(At)] <- NA
-        A <- stepfun(times, c(NA,At))
+        A <- stepfun(times, c(NA, At))
         attributes(A)$call <- "Discrimination OR: Incorrect and Slow"
       }
     }
-  } else if (rule=="AND") {
+  }
+  else if (rule == "AND") {
     if (correct & fast) {
-      ecdf.redundant <- ecdf(RT[[1]][ CR[[1]]==1 ])
-      ecdf.channel1  <- ecdf(RT[[2]][ CR[[2]]==1 ])
-      ecdf.channel2  <- ecdf(RT[[3]][ CR[[3]]==1 ])
-
-      numer <- log( ecdf.channel1(times) * p.correct[2] ) + log( ecdf.channel2(times) * p.correct[3] ) 
-      denom <- log( ecdf.redundant(times) * p.correct[1] ) 
-
+      ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 1])
+      ecdf.channel1 <- ecdf(RT[[2]][CR[[2]] == 1])
+      ecdf.channel2 <- ecdf(RT[[3]][CR[[3]] == 1])
+      numer <- log(ecdf.channel1(times) * p.correct[2]) + 
+        log(ecdf.channel2(times) * p.correct[3])
+      denom <- log(ecdf.redundant(times) * p.correct[1])
       At <- numer/denom
       At[!is.finite(At)] <- NA
-      A <- stepfun(times, c(NA,At))
+      A <- stepfun(times, c(NA, At))
       attributes(A)$call <- "AND: Correct and Fast"
     }
     if (correct & slow) {
-      ecdf.redundant <- ecdf(RT[[1]][ CR[[1]]==1 ])
-      ecdf.channel1  <- ecdf(RT[[2]][ CR[[2]]==1 ])
-      ecdf.channel2  <- ecdf(RT[[3]][ CR[[3]]==1 ])
-
-      channel1C  <- (1-ecdf.channel1(times)) * p.correct[2] * p.correct[3]
-      channel2C  <- (1-ecdf.channel2(times)) * p.correct[3] * p.correct[2]
-      channelCC <-  (1-ecdf.channel1(times)) * p.correct[2] * (1-ecdf.channel2(times)) * p.correct[3]
-
-      numer <- log ( channel1C + channel2C - channelCC ) 
-      denom <- log ( (1-ecdf.redundant(times)) * p.correct[1] ) 
-
+      ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 1])
+      ecdf.channel1 <- ecdf(RT[[2]][CR[[2]] == 1])
+      ecdf.channel2 <- ecdf(RT[[3]][CR[[3]] == 1])
+      channel1C <- (1 - ecdf.channel1(times)) * p.correct[2] * 
+        p.correct[3]
+      channel2C <- (1 - ecdf.channel2(times)) * p.correct[3] * 
+        p.correct[2]
+      channelCC <- (1 - ecdf.channel1(times)) * p.correct[2] * 
+        (1 - ecdf.channel2(times)) * p.correct[3]
+      numer <- log(channel1C + channel2C - channelCC)
+      denom <- log((1 - ecdf.redundant(times)) * p.correct[1])
       At <- numer/denom
       At[!is.finite(At)] <- NA
-      A <- stepfun(times, c(NA,At))
+      A <- stepfun(times, c(NA, At))
       attributes(A)$call <- "AND: Correct and Slow"
     }
-    if (incorrect & fast ) {
-      ecdf.redundant <- ecdf(RT[[1]][ CR[[1]]==0 ])
-      ecdf.channel1  <- ecdf(RT[[2]][ CR[[2]]==0 ])
-      ecdf.channel2  <- ecdf(RT[[3]][ CR[[3]]==0 ])
-
-      channel1I  <- ecdf.channel1(times) * (1-p.correct[2]) * p.correct[3]
-      channel2I  <- ecdf.channel2(times) * (1-p.correct[3]) * p.correct[2]
-      channel12I <- ecdf.channel1(times) * (1-p.correct[2]) * (1-ecdf.channel2(times)) * (1-p.correct[3])
-      channel21I <- (1-ecdf.channel1(times)) * (1-p.correct[2]) * ecdf.channel2(times) * (1-p.correct[3])
-      channelII <- ecdf.channel1(times) * (1-p.correct[2]) * ecdf.channel2(times) * (1-p.correct[3])
-
-      numer <- log( channel1I + channel2I + channel12I + channel21I + channelII)
-      denom <- log( ecdf.redundant(times) * (1-p.correct[1]) )
-
+    if (incorrect & fast) {
+      ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 0])
+      ecdf.channel1 <- ecdf(RT[[2]][CR[[2]] == 0])
+      ecdf.channel2 <- ecdf(RT[[3]][CR[[3]] == 0])
+      channel1I <- ecdf.channel1(times) * (1 - p.correct[2]) * 
+        p.correct[3]
+      channel2I <- ecdf.channel2(times) * (1 - p.correct[3]) * 
+        p.correct[2]
+      channel12I <- ecdf.channel1(times) * (1 - p.correct[2]) * 
+        (1 - ecdf.channel2(times)) * (1 - p.correct[3])
+      channel21I <- (1 - ecdf.channel1(times)) * (1 - p.correct[2]) * 
+        ecdf.channel2(times) * (1 - p.correct[3])
+      channelII <- ecdf.channel1(times) * (1 - p.correct[2]) * 
+        ecdf.channel2(times) * (1 - p.correct[3])
+      numer <- log(channel1I + channel2I + channel12I + 
+                     channel21I + channelII)
+      denom <- log(ecdf.redundant(times) * (1 - p.correct[1]))
       At <- numer/denom
       At[!is.finite(At)] <- NA
-      A <- stepfun(times, c(NA,At))
+      A <- stepfun(times, c(NA, At))
       attributes(A)$call <- "AND: Incorrect and Fast"
-
     }
     if (incorrect & slow) {
-      ecdf.redundant <- ecdf(RT[[1]][ CR[[1]]==0 ])
-      ecdf.channel1  <- ecdf(RT[[2]][ CR[[2]]==0 ])
-      ecdf.channel2  <- ecdf(RT[[3]][ CR[[3]]==0 ])
-
-      channel1I  <- (1-ecdf.channel1(times)) * (1-p.correct[2]) * p.correct[3]
-      channel2I  <- (1-ecdf.channel2(times)) * (1-p.correct[3]) * p.correct[2]
-      channelII <-  (1-ecdf.channel1(times)) * (1-p.correct[2]) * (1-ecdf.channel2(times)) * (1-p.correct[3])
-
-      numer <- log( channel1I + channel2I + channelII )
-      denom <- log( (1-ecdf.redundant(times)) * (1-p.correct[1]) )
-      
+      ecdf.redundant <- ecdf(RT[[1]][CR[[1]] == 0])
+      ecdf.channel1 <- ecdf(RT[[2]][CR[[2]] == 0])
+      ecdf.channel2 <- ecdf(RT[[3]][CR[[3]] == 0])
+      channel1I <- (1 - ecdf.channel1(times)) * (1 - p.correct[2]) * 
+        p.correct[3]
+      channel2I <- (1 - ecdf.channel2(times)) * (1 - p.correct[3]) * 
+        p.correct[2]
+      channelII <- (1 - ecdf.channel1(times)) * (1 - p.correct[2]) * 
+        (1 - ecdf.channel2(times)) * (1 - p.correct[3])
+      numer <- log(channel1I + channel2I + channelII)
+      denom <- log((1 - ecdf.redundant(times)) * (1 - p.correct[1]))
       At <- numer/denom
       At[!is.finite(At)] <- NA
-      A <- stepfun(times, c(NA,At))
+      A <- stepfun(times, c(NA, At))
       attributes(A)$call <- "AND: Incorrect and Slow"
+    }
+  }
+  else if (rule == "STST") {
+    if (detection == TRUE){
+      if (correct & fast) {
+        numer <- log(p.correct[2]) + 
+		 estimateNAK(RT = RT[[2]][CR[[2]] == 1])$K(times)
+        denom <- log(p.correct[1]) +
+		 estimateNAK(RT = RT[[1]][CR[[1]] == 1])$K(times)
+        At <- numer/denom
+        At[!is.finite(At)] <- NA
+        A <- stepfun(times, c(NA, At))
+        attributes(A)$call <- "Detection STST: Correct and Fast"
+      }
+      if (correct & slow) {
+        numer <- log(p.correct[2]) - 
+		 estimateNAH(RT = RT[[2]][CR[[2]] == 1])$H(times)
+        denom <- log(p.correct[1]) - 
+		 estimateNAH(RT = RT[[1]][CR[[1]] == 1])$H(times)
+        At <- denom/numer
+        At[!is.finite(At)] <- NA
+        A <- stepfun(times, c(NA, At))
+        attributes(A)$call <- "Detection STST: Correct and Slow"
+      }
+      if (incorrect & fast) {
+        numer <- log(1-p.correct[2]) + 
+		 estimateNAK(RT = RT[[2]][CR[[2]] == 0])$K(times)
+        denom <- log(1-p.correct[1]) +
+		 estimateNAK(RT = RT[[1]][CR[[1]] == 0])$K(times)
+        At <- numer/denom
+        At[!is.finite(At)] <- NA
+        A <- stepfun(times, c(NA, At))
+        attributes(A)$call <- "Detection STST: Incorrect and Fast"
+      }
+      if (incorrect & slow) {
+        numer <- log(1-p.correct[2]) - 
+		 estimateNAH(RT = RT[[2]][CR[[2]] == 0])$H(times)
+        denom <- log(1-p.correct[1]) - 
+		 estimateNAH(RT = RT[[1]][CR[[1]] == 0])$H(times)
+      At <- denom/numer
+      At[!is.finite(At)] <- NA
+      A <- stepfun(times, c(NA, At))
+      attributes(A)$call <- "Detection STST: Incorrect and Slow"
+      }
+    }
+    if (detection == FALSE){
+      if (correct & fast) {
+#        numer <- log((p.correct[2] * p.correct[3] * ecdf(RT[[2]][CR[[2]] == 1])(times)) +
+#                       ((1-p.correct[2]) * (1 - p.correct[3]) * ecdf(RT[[3]][CR[[3]] == 0])(times)) +
+#                       (p.correct[2] * (1 - p.correct[3]) * (1 - ((1 - ecdf(RT[[2]][CR[[2]] == 1])(times)) *
+#                                                                   (1 - ecdf(RT[[3]][CR[[3]] == 0])(times))))))
+	numer <- log(p.correct[2] * p.correct[3] * 
+		     ecdf(RT[[2]][CR[[2]]==1])(times) + 
+	             (1 - p.correct[2]) * (1 - p.correct[3]) * 
+		     ecdf(RT[[2]][CR[[2]]==0])(times) + 
+	             p.correct[2] * (1 - p.correct[3]) * 
+		     (1-(1-ecdf(RT[[2]][CR[[2]]==1])(times)) *
+		        (1-ecdf(RT[[3]][CR[[3]]==0])(times))))
+        denom <- log(p.correct[1]) + 
+		 estimateNAK(RT = RT[[1]][CR[[1]] == 1])$K(times)
+        At <- numer/denom
+        At[!is.finite(At)] <- NA
+        A <- stepfun(times, c(NA, At))
+        attributes(A)$call <- "Discrimination STST: Correct and Fast"
+      }
+      
 
+      if (correct & slow) {
+        numer <- log(p.correct[1]) - estimateNAH(RT = RT[[1]][CR[[1]] == 1])$H(times)
+        
+        denom <- log((p.correct[2] * p.correct[3] * (1 - ecdf(RT[[2]][CR[[2]] == 1])(times))) + 
+                       ((1-p.correct[2]) * (1 - p.correct[3]) * (1 - ecdf(RT[[3]][CR[[3]] == 0])(times)))  + 
+                       (p.correct[2] * (1 - p.correct[3]) * (1 - ecdf(RT[[2]][CR[[2]] == 1])(times)) * 
+                          (1 - ecdf(RT[[3]][CR[[3]] == 0])(times))))
+        At <- numer/denom
+        At[!is.finite(At)] <- NA
+        A <- stepfun(times, c(NA, At))
+        attributes(A)$call <- "Discrimination STST: Correct and Slow"
+      }
+      
+      
+      if (incorrect & fast) {
+        denom <- log(1 - p.correct[1]) + log(ecdf(RT[[1]][CR[[1]] == 0])(times))
+        numer <- log(1 - p.correct[2]) + log(ecdf(RT[[2]][CR[[2]] == 0])(times)) + 
+          log(p.correct[3]) + log(ecdf(RT[[3]][CR[[3]] == 1])(times)) 
+        At <- numer/denom
+        At[!is.finite(At)] <- NA
+        A <- stepfun(times, c(NA, At))
+        attributes(A)$call <- "Discrimination STST: Incorrect and Fast"
+      }
+      
+      
+      if (incorrect & slow) {
+        numer <- log(1-p.correct[1]) - estimateNAH(RT = RT[[1]][CR[[1]] == 0])$H(times)
+        de <- log((1-p.correct[2]) * p.correct[3] * (1-(ecdf(RT[[2]][CR[[2]] == 0])(times) * 
+                                                             ecdf(RT[[3]][CR[[3]] == 1])(times))))
+        At <- numer/denom
+        At[!is.finite(At)] <- NA
+        A <- stepfun(times, c(NA, At))
+        attributes(A)$call <- "Discrimination STST: Incorrect and Slow"
+      } 
     }
   }
   return(A)

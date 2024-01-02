@@ -27,6 +27,9 @@ Eidels, A., Townsend, J. T., Hughes, H. C., & Perry, L. A. (2012). Complementary
 \references{
 Houpt, J.W. & Townsend, J.T. (2010). The statistical properties of the survivor interaction contrast. \emph{Journal of Mathematical Psychology, 54}, 446-453.
 }
+\author{
+Joe Houpt <joseph.houpt@utsa.edu>
+}
 \examples{
 data(dots)
 summary(dots)

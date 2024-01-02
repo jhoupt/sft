@@ -26,7 +26,7 @@ The Nelson-Aalen estimator of the cumulative hazard function is a step function 
 Aalen, O. O., Borgan, O., & Gjessing, H. K. (2008). \emph{Survival and event history analysis: A process point of view}. New York: Springer.
 }
 \author{
-Joe Houpt <joseph.houpt@wright.edu>
+Joe Houpt <joseph.houpt@utsa.edu>
 }
 
 \seealso{
