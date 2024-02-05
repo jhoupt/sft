@@ -1,4 +1,4 @@
-assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"), 
+assessmentGroup <- function(inData, stopping.rule=c("OR", "AND", "STST"), 
                             correct=c(TRUE, FALSE), fast=c(TRUE,FALSE), 
                             detection=TRUE, plotAt=TRUE, ...) {
   subjects <- sort(unique(inData$Subject))
@@ -15,7 +15,7 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"),
     stop("Not enough channels for assessment analysis.")
   }
 
-  rule <- match.arg(stopping.rule, c("OR","AND"))
+  rule <- match.arg(stopping.rule, c("OR","AND", "STST"))
 
   times <- seq(quantile(inData$RT,.001), quantile(inData$RT,.999), 
               length.out=1000)
@@ -69,7 +69,8 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"),
         good1 <- FALSE 
       }
 
-      for ( ch in 1:nchannels ) {
+      n <- ifelse(stopping.rule == "STST", nchannels-1, nchannels)
+      for ( ch in 1:n ) {
         usechannel <- ds & inData[,channels[ch]]>0 & 
                       apply(as.matrix(inData[,channels[-ch]]==0), 1, all)
         RTlist[[ch+1]] <- inData$RT[usechannel]
@@ -125,7 +126,8 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND"),
   }
 
 
-  return(list(Subject=subj.out, Condition=cond.out, At.fn=atMat, assessment=atlist, times=times))
+  overview <- data.frame(Subject=subj.out, Condition=cond.out)
+  return(list(overview, At.fn=atMat, assessment=atlist, times=times))
 
 }
 
