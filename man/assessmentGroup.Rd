@@ -32,7 +32,7 @@ For the details of the assessment functions, see \code{\link{assessment}}.
 \references{
 Townsend, J.T. and Altieri, N. (2012).  An accuracy-response time capacity assessment function that measures performance against standard parallel predictions. \emph{Psychological Review, 3}, 500-516.
 
-Donkin, C., Little, D. R., and Houpt, J. W. (2014). Assessing the speed-accuracy trade-off effect on the capacity of information processing. \emph{Journal of Experimental Psychology: Human Perception and Performance, 40(3),} 1183.}
+Donkin, C., Little, D. R., and Houpt, J. W. (2014). Assessing the speed-accuracy trade-off effect on the capacity of information processing. \emph{Journal of Experimental Psychology: Human Perception and Performance, 40(3),} 1183.
 }
 \author{
 Joe Houpt <joseph.houpt@utsa.edu>

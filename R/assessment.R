@@ -62,22 +62,50 @@ assessmentGroup <- function(inData, stopping.rule=c("OR", "AND", "STST"),
       good1 <- TRUE
 
 
-      usechannel <- ds & apply(inData[,channels]>0, 1, all)
-      RTlist[[1]] <- inData$RT[usechannel]
-      CRlist[[1]] <- inData$Correct[usechannel]
-      if(sum(CRlist[[1]]) < 10) {
-        good1 <- FALSE 
-      }
 
-      n <- ifelse(stopping.rule == "STST", nchannels-1, nchannels)
-      for ( ch in 1:n ) {
-        usechannel <- ds & inData[,channels[ch]]>0 & 
-                      apply(as.matrix(inData[,channels[-ch]]==0), 1, all)
-        RTlist[[ch+1]] <- inData$RT[usechannel]
-        CRlist[[ch+1]] <- inData$Correct[usechannel]
-        if(sum(CRlist[[ch+1]]) < 10) {
-            good1 <- FALSE
+
+
+      if(rule =="STST") {
+        usechannel <- ds &  (apply(inData[,channels]>0, 1, sum)==1) & (apply(inData[,channels]<0, 1, sum)>0)
+        RTlist[[1]] <- inData$RT[usechannel]
+        CRlist[[1]] <- inData$Correct[usechannel]
+        if(mean(CRlist[[1]]) == 0 | sum(CRlist[[1]]) < 10) {
+          good1 <- FALSE 
         }
+
+        usechannel <- ds & apply(inData[,channels]>=0, 1, all) & (apply(inData[,channels]!=0, 1, sum)==1)
+        RTlist[[2]] <- inData$RT[usechannel]
+        CRlist[[2]] <- inData$Correct[usechannel]
+        if(mean(CRlist[[2]]) == 0 | sum(CRlist[[2]]) < 10) {
+          good1 <- FALSE 
+        }
+	if( !detection) {
+          usechannel <- ds & apply(inData[,channels]<=0, 1, all) & (apply(inData[,channels]!=0, 1, sum)==1)
+          RTlist[[3]] <- inData$RT[usechannel]
+          CRlist[[3]] <- inData$Correct[usechannel]
+        if(mean(CRlist[[3]]) == 0 | sum(CRlist[[3]]) < 10) {
+          good1 <- FALSE 
+        }
+
+         }
+
+      } else {
+      	usechannel <- ds & apply(inData[,channels]>0, 1, all)
+      	RTlist[[1]] <- inData$RT[usechannel]
+      	CRlist[[1]] <- inData$Correct[usechannel]
+      	if(sum(CRlist[[1]]) < 10) {
+      	  good1 <- FALSE 
+      	}
+        n <- ifelse(stopping.rule == "STST", nchannels-1, nchannels)
+      	for ( ch in 1:n ) {
+      	  usechannel <- ds & inData[,channels[ch]]>0 & 
+      	                apply(as.matrix(inData[,channels[-ch]]==0), 1, all)
+      	  RTlist[[ch+1]] <- inData$RT[usechannel]
+      	  CRlist[[ch+1]] <- inData$Correct[usechannel]
+      	  if(sum(CRlist[[ch+1]]) < 10) {
+      	      good1 <- FALSE
+      	  }
+      	}
       }
 
 
