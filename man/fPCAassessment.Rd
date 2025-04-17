@@ -50,7 +50,7 @@ Joe Houpt <joseph.houpt@utsa.edu>
 }
 \seealso{
 \code{\link{assessment}}
-\code{\link{fda}}
+\code{\link{fda:fda}}
 }
 \examples{
 \dontrun{

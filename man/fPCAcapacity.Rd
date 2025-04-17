@@ -47,7 +47,7 @@ Devin Burns <burnsde@mst.edu>
 \seealso{
 \code{\link{capacity.and}}
 \code{\link{capacity.or}}
-\code{\link{fda}}
+\code{\link{fda:fda}}
 }
 \examples{
 \dontrun{
