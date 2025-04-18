@@ -7,15 +7,15 @@ Capacity Coefficient for Full Identification (ID) Exhaustive Processing
 Calculates the capacity coefficient for exhaustive processing accounting for processing differences in no-responses to single targets.  The motivation for this version of the AND capacity coefficient is described in Howard et. al (2020).
 }
 \usage{
-capacity.id(dual.target.rt, no.target.rt, single.target.rt, dual.target.cr, no.target.cr, single.target.crs, ratio=TRUE)
+capacity.id(dt.rt, nt.rt, st.rts, dt.cr, nt.cr, st.crs, ratio=TRUE)
 }
 \arguments{
-  \item{dual.target.rt}{Response times from trials on which all signals indicate targets.}
-  \item{no.target.rt}{Response times from trials on which all signals are either absent or are non-targets.}
-  \item{single.target.rts}{A list of arrays of response times from with each list containing response times for trials on which a distinct signal is the only signal present or that is indicating the target response.}
-  \item{dual.target.cr}{A vector of indicators from trials on which all signals indicate targets indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
-  \item{no.target.cr}{A vector of indicators from trials on which all signals are either absent or are non-targets indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
-  \item{single.target.crs}{A list of vectors of indicators from with each list containing response times for trials on which a distinct signal is the only signal present or that is indicating the target response indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
+  \item{dt.rt}{Response times from trials on which all signals indicate targets.}
+  \item{nt.rt}{Response times from trials on which all signals are either absent or are non-targets.}
+  \item{st.rts}{A list of arrays of response times from with each list containing response times for trials on which a distinct signal is the only signal present or that is indicating the target response.}
+  \item{dt.cr}{A vector of indicators from trials on which all signals indicate targets indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
+  \item{nt.cr}{A vector of indicators from trials on which all signals are either absent or are non-targets indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
+  \item{st.crs}{A list of vectors of indicators from with each list containing response times for trials on which a distinct signal is the only signal present or that is indicating the target response indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
   \item{ratio}{Indicates whether to return the standard ratio capacity coefficient or, if FALSE, the difference form.}
 }
 \details{
@@ -70,13 +70,13 @@ RT.pp.unlimited <- pmax( rexp(100, rate1p), rexp(100, rate2p))
 RT.pp.super <- pmax( rexp(100, 2*rate1p), rexp(100, 2*rate2p))
 tvec <- sort(unique(c(RT.pa, RT.ap, RT.pp.limited, RT.pp.unlimited, RT.pp.super)))
 
-cap.limited <- capacity.id(dual.target.rt=RT.pp.limited, no.target.rt=RT.nt, 
-			   single.target.rts=list(RT.pa, RT.ap))
+cap.limited <- capacity.id(dt.rt=RT.pp.limited, nt.rt=RT.nt, 
+			   st.rts=list(RT.pa, RT.ap))
 print(cap.limited$Ctest)
-cap.unlimited <- capacity.id(dual.target.rt=RT.pp.unlimited, no.target.rt=RT.nt, 
-			     single.target.rts=list(RT.pa, RT.ap))
-cap.super <- capacity.id(dual.target.rt=RT.pp.super, no.target.rt=RT.nt, 
-			 single.target.rts=list(RT.pa, RT.ap))
+cap.unlimited <- capacity.id(dt.rt=RT.pp.unlimited, nt.rt=RT.nt, 
+			     st.rts=list(RT.pa, RT.ap))
+cap.super <- capacity.id(dt.rt=RT.pp.super, nt.rt=RT.nt, 
+			 st.rts=list(RT.pa, RT.ap))
 
 matplot(tvec, cbind(cap.limited$Ct(tvec), cap.unlimited$Ct(tvec), cap.super$Ct(tvec)),
   type='l', lty=1, ylim=c(0,3), col=2:4, main="Example Capacity Functions", xlab="Time", 

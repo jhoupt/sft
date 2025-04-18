@@ -1,10 +1,11 @@
 Package: sft
-Version: 2.3
-Date: 2022-08-05
+Version: 2.4
+Date: 2025-04-18
 Title: Functions for Systems Factorial Technology Analysis of Data
-Author: Joe Houpt <joseph.houpt@utsa.edu>, Leslie Blaha <Leslie.Blaha@wpafb.af.mil>
+Authors@R: c(person("Joe", "Houpt", role=c("aut", "cre"), email="joseph.houpt@utsa.edu", comment=c(ORCID="0000-0002-2784-5535")), 
+           person("Leslie", "Blaha", role="aut", email="Leslie.Blaha@us.af.mil"))
 Maintainer: Joe Houpt <joseph.houpt@utsa.edu>
-Depends: R (>= 1.8.0), methods, fda, SuppDists
+Depends: R (>= 3.5), methods, fda, SuppDists
 Description: A series of tools for analyzing Systems Factorial Technology data.  This includes functions for plotting and statistically testing capacity coefficient functions and survivor interaction contrast functions.  Houpt, Blaha, McIntire, Havig, and Townsend (2013) <doi:10.3758/s13428-013-0377-3> provide a basic introduction to Systems Factorial Technology along with examples using the sft R package.
 License: GPL (>=2)
 RoxygenNote: 6.0.1

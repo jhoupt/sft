@@ -7,14 +7,13 @@ Workload Assessment Functions
 Calculates the Workload Assessment Functions
 }
 \usage{
-assessment(RT, CR, OR=NULL, stopping.rule=c("OR","AND"), correct=c(TRUE, FALSE), 
+assessment(RT, CR, stopping.rule=c("OR","AND", "STST"), correct=c(TRUE, FALSE), 
   fast=c(TRUE, FALSE), detection=TRUE) 
 }
 \arguments{
   \item{RT}{A list of response time arrays.  The first array in the list is assumed to be the exhaustive condition.}
   \item{CR}{A list of correct/incorrect indicator arrays.  If NULL, assumes all are correct.}
-  \item{OR}{Indicates whether to compare performance to an OR or AND processing baseline.  Provided for backwards compatibility for package version < 2. }
-  \item{stopping.rule}{Indicates whether to compare performance to an OR or AND processing baseline.}
+  \item{stopping.rule}{Indicates whether to compare performance to an OR, AND, or STST processing baseline.}
   \item{correct}{Indicates whether to assess performance on correct trials.}
   \item{fast}{Indicates whether to use cumulative distribution functions or survivor functions to assess performance.}
   \item{detection}{Indicates whether to use a detection task baseline or a discrimination task baseline.}

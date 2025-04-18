@@ -7,15 +7,15 @@ A Statistical Test for Super or Limited Capacity
 A nonparametric test for capacity values significantly different than those predicted by the estimated unlimited capacity, independent parallel model.
 }
 \usage{
-ucip.test(dual.target.rt, no.target.rt, single.target.rts, dual.target.cr=NULL, no.target.cr=NULL, single.target.crs=NULL)
+ucip.id.test(dt.rt, nt.rt, st.rts, dt.cr=NULL, nt.cr=NULL, st.crs=NULL)
 }
 \arguments{
-  \item{dual.target.rt}{Response times from trials on which all signals indicate targets.}
-  \item{no.target.rt}{Response times from trials on which all signals are either absent or are non-targets.}
-  \item{single.target.rts}{A list of arrays of response times from with each list containing response times for trials on which a distinct signal is the only signal present or that is indicating the target response.}
-  \item{dual.target.cr}{A vector of indicators from trials on which all signals indicate targets indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
-  \item{no.target.cr}{A vector of indicators from trials on which all signals are either absent or are non-targets indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
-  \item{single.target.crs}{A list of vectors of indicators from with each list containing response times for trials on which a distinct signal is the only signal present or that is indicating the target response indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
+  \item{dt.rt}{Response times from trials on which all signals indicate targets.}
+  \item{nt.rt}{Response times from trials on which all signals are either absent or are non-targets.}
+  \item{st.rts}{A list of arrays of response times from with each list containing response times for trials on which a distinct signal is the only signal present or that is indicating the target response.}
+  \item{dt.cr}{A vector of indicators from trials on which all signals indicate targets indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
+  \item{nt.cr}{A vector of indicators from trials on which all signals are either absent or are non-targets indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
+  \item{st.crs}{A list of vectors of indicators from with each list containing response times for trials on which a distinct signal is the only signal present or that is indicating the target response indicating whether the participant correctly responded to the corresponding trial. If NULL, assumes all are correct.}
 }
 \details{
 The test is based on the Nelson-Aalen formulation of the log-rank test.  The function takes a weighted difference between estimated unlimited capacity, independent parallel performance, based on a participants single source response times, and the participants true performance when all sources are present.  Use this statistic with caution. It has not been thorougly tested nor subjected to peer review. 
@@ -56,8 +56,8 @@ RT.pp.limited <- pmax( rexp(100, .5*rate1p), rexp(100, .5*rate2p))
 RT.pp.unlimited <- pmax( rexp(100, rate1p), rexp(100, rate2p))
 RT.pp.super <- pmax( rexp(100, 2*rate1p), rexp(100, 2*rate2p))
 
-z.limited   <- ucip.id.test(RT=list(dual.target=RT.pp.limited,   no.target=RT.nt, single.target.rts=list(RT.pa, RT.ap))) 
-z.unlimited <- ucip.id.test(RT=list(dual.target=RT.pp.unlimited, no.target=RT.nt, single.target.rts=list(RT.pa, RT.ap))) 
-z.super     <- ucip.id.test(RT=list(dual.target=RT.pp.super,     no.target=RT.nt, single.target.rts=list(RT.pa, RT.ap))) 
+z.limited   <- ucip.id.test(dt.rt=RT.pp.limited,   nt.rt=RT.nt, st.rts=list(RT.pa, RT.ap)) 
+z.unlimited <- ucip.id.test(dt.rt=RT.pp.unlimited, nt.rt=RT.nt, st.rts=list(RT.pa, RT.ap)) 
+z.super     <- ucip.id.test(dt.rt=RT.pp.super,     nt.rt=RT.nt, st.rts=list(RT.pa, RT.ap)) 
 }
 \keyword{ ~sft }
