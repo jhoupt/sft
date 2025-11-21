@@ -275,7 +275,7 @@ fPCAassessment<- function(sftData, dimensions,
            xaxt='n', ylab="", xlab="Subject")
       axis(1, at=1:10, labels=rep("",10), las=0, cex=.1, tck=-.02)
       mtext(side=1, 1:10, at=1:10, line=.05, cex=.7)
-      text(scoreout.v$Subject, scoreout.v[[ifac + 2]], 
+      text(factor(scoreout.v$Subject), scoreout.v[[ifac + 2]], 
            labels=scoreout.v$Condition, col=colvec)
 
       if(ifac==1) {

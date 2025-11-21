@@ -356,7 +356,7 @@ fPCAcapacity <- function(sftData, dimensions, acc.cutoff=.75, OR=NULL, stopping.
       abline(0,0, col=grey(.4))
       if(ifac==1) {mtext("Component - Mean", side=3, line=.5)}
 
-      plot(scoreout$Subject, scoreoutV[[ifac+2]], type="n", #ylim=c(-2,2),
+      plot(factor(scoreout$Subject), scoreoutV[[ifac+2]], type="n", #ylim=c(-2,2),
         xaxt='n', ylab="", xlab="Subject")
       axis(1,at=1:10, labels=rep("",10), las=0, cex=.1, tck=-.02)
       mtext(side=1, 1:10, at=1:10, line=.05, cex=.7)
