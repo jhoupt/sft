@@ -1,28 +1,28 @@
-capacity.id <- function(dual.target.rt, no.target.rt, single.target.rts, dual.target.cr=NULL, no.target.cr=NULL, single.target.crs=NULL, ratio=TRUE) {
-    n_single <- length(single.target.rts)
+capacity.id <- function(dt.rt, nt.rt, st.rts, dt.cr=NULL, nt.cr=NULL, st.crs=NULL, ratio=TRUE) {
+    n_single <- length(st.rts)
 
-    if ( is.null(dual.target.cr) ) { 
-      dual.target.cr <- rep(1, length(dual.target.rt))
+    if ( is.null(dt.cr) ) { 
+      dt.cr <- rep(1, length(dt.rt))
     } 
-    if ( is.null(no.target.cr) ) { 
-      no.target.cr <- rep(1, length(no.target.rt))
+    if ( is.null(nt.cr) ) { 
+      nt.cr <- rep(1, length(nt.rt))
     } 
-    if ( is.null(single.target.crs) | (length(single.target.crs) != n_single) ) {
-      single.target.crs <- vector("list", n_single)
+    if ( is.null(st.crs) | (length(st.crs) != n_single) ) {
+      st.crs <- vector("list", n_single)
       for( i in 1:n_single ) {
-        single.target.crs[[i]] <- rep(1, length(single.target.rts[[i]]))
+        st.crs[[i]] <- rep(1, length(st.rts[[i]]))
       }
     } 
-    times <- sort(unique(c(dual.target.rt, no.target.rt, c(single.target.rts, recursive=TRUE)))) 
+    times <- sort(unique(c(dt.rt, nt.rt, c(st.rts, recursive=TRUE)))) 
 
-    rmtest <-  ucip.id.test(dual.target.rt, no.target.rt, single.target.rts, dual.target.cr, no.target.cr, single.target.crs)
+    rmtest <-  ucip.id.test(dt.rt, nt.rt, st.rts, dt.cr, nt.cr, st.crs)
 
     # Find Nelson-Aalen Reverse Cumulative Hazard Estimates
-    NAK.dual <- estimateNAK(dual.target.rt, dual.target.cr) 
-    NAK.no <- estimateNAK(no.target.rt, no.target.cr)
+    NAK.dual <- estimateNAK(dt.rt, dt.cr) 
+    NAK.no <- estimateNAK(nt.rt, nt.cr)
     NAK.single <- vector("list", n_single)
     for ( i in 1:n_single) { 
-        NAK.single[[i]] <- estimateNAK(single.target.rts[[i]], single.target.crs[[i]])
+        NAK.single[[i]] <- estimateNAK(st.rts[[i]], st.crs[[i]])
     }
 
     # Calculate the and capacity coefficient

@@ -1,4 +1,3 @@
-source("~/Documents/git/sft/R/assessment.R")
 
 rate.c <- .015
 rate.i <- rate.c * .5#2/3

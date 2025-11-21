@@ -101,32 +101,32 @@ ucip.test <- function(RT, CR=NULL, OR=NULL, stopping.rule=c("OR","AND","STST")) 
   return(rval)
 }
 
-ucip.id.test <- function(dual.target.rt, no.target.rt, single.target.rts, dual.target.cr=NULL, no.target.cr=NULL, single.target.crs=NULL) {
+ucip.id.test <- function(dt.rt, nt.rt, st.rts, dt.cr=NULL, nt.cr=NULL, st.crs=NULL) {
   METHOD <- "Houpt-Townsend UCIP test"
 
-  n_single <- length(single.target.rts)
+  n_single <- length(st.rts)
 
-  if ( is.null(dual.target.cr) ) { 
-    dual.target.cr <- rep(1, length(dual.target.rt))
+  if ( is.null(dt.cr) ) { 
+    dt.cr <- rep(1, length(dt.rt))
   } 
-  if ( is.null(no.target.cr) ) { 
-    no.target.cr <- rep(1, length(no.target.rt))
+  if ( is.null(nt.cr) ) { 
+    nt.cr <- rep(1, length(nt.rt))
   } 
-  if ( is.null(single.target.crs) | (length(single.target.crs) != n_single) ) {
-    single.target.crs <- vector("list", n_single)
+  if ( is.null(st.crs) | (length(st.crs) != n_single) ) {
+    st.crs <- vector("list", n_single)
     for( i in 1:n_single ) {
-      single.target.crs[[i]] <- rep(1, length(single.target.rts[[i]]))
+      st.crs[[i]] <- rep(1, length(st.rts[[i]]))
     }
   } 
 
-  allRT <- c(dual.target.rt, no.target.rt, c(single.target.rts, recursive=TRUE))
-  allCR <- c(dual.target.cr, no.target.cr, c(single.target.crs, recursive=TRUE))
+  allRT <- c(dt.rt, nt.rt, c(st.rts, recursive=TRUE))
+  allCR <- c(dt.cr, nt.cr, c(st.crs, recursive=TRUE))
   #allRT <- c(RT, recursive=TRUE)
   Nt <- length(allRT)
 
-  index <- c(rep(1, length(dual.target.rt)), rep(2, length(no.target.rt)))
+  index <- c(rep(1, length(dt.rt)), rep(2, length(nt.rt)))
   for ( i in 1:n_single) {
-    index <- c(index, rep(i+2, length(single.target.rts[[i]])))
+    index <- c(index, rep(i+2, length(st.rts[[i]])))
   }
 
   RTmat <- cbind( allRT, allCR, index)
